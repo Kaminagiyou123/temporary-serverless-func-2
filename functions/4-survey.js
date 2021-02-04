@@ -5,6 +5,8 @@ const airtable= new Airtable({ apiKey:process.env.AIRTABLE_API_KEY})
     .table('survey')
 
 exports.handler=async(event,context,cb)=>{
+    const method=event.httpMethod;
+    if (method==='GET'){
     try{
     const {records}=await airtable.list()
     const survey=records.map((item)=>{
@@ -32,13 +34,39 @@ exports.handler=async(event,context,cb)=>{
         }
         
 
-    }
-    
+    }    
+} if (method ==='PUT'){
+    //default response
+    try{
+const {id,votes}=JSON.parse(event.body);
+if (!id|| !votes){
     return {
-        headers:{
-            'Access-Control-Allow-Origin':"*",
-        },
+        statusCode:400,
+        boday:'please provid id and votes'
+    }   
+    
+}
+const fields={votes:Number(votes)+1}
+const item=await airtable.update(id,{fields})
+if(item.error){
+    return{
+        statusCode:400,
+        body: JSON.stringify(item)
+    }
+} else {
+    return{
         statusCode:200,
-        body:'Our First Survey'
+        body: JSON.stringify(item)
     }
 }
+    } catch(error){
+        return{
+            statusCode:400,
+            body: JSON.stringify(item)
+        }
+    }
+}
+return {
+    statusCode:405,
+    body:"Only Get and Put method allowed"
+}}
