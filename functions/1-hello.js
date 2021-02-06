@@ -7,6 +7,6 @@ exports.handler=async(event,context,cb)=>{
             'Access-Control-Allow-Origin':"*",
         },
         statusCode:200,
-        body:'Our First Neflify Function Example Again'
+        body:'why the website doenst change? Our First Neflify Function Example'
     }
 }
