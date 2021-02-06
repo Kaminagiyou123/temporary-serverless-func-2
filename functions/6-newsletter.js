@@ -7,7 +7,7 @@ exports.handler=async(event,context,cb)=>{
    if (method!=='POST'){
        return {
            statusCode:405,
-           body:'Only PUT Requests Allowed'
+           body:'Only POST Requests Allowed'
        }
    }
  const {email}=JSON.parse(event.body)

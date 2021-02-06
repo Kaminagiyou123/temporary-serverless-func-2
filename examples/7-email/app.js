@@ -8,36 +8,35 @@ const alert = document.querySelector('.alert')
 const title = document.querySelector('.title')
 alert.style.display = 'none'
 
-form.addEventListener('submit', async function (e) {
+form.addEventListener('submit',async function(e){
   e.preventDefault()
-  alert.style.display = 'none'
-  btn.disabled = true
-  btn.innerHTML = '<span class="sending"></span>'
+  alert.style.display='none';
+  btn.disabled=true;
+  btn.innerHTML=`<span class='sending'></span>`
+  const name=nameInput.value
+  const email=emailInput.value
+  const subject=subjectInput.value
+  const message=messageInput.value
 
-  const name = nameInput.value
-  const email = emailInput.value
-  const subject = subjectInput.value
-  const message = messageInput.value
+try{
+  await axios.post('/api/7-email',{
+    name,email,subject,message,
+  })
+  nameInput.value=''
+  messageInput.value=''
+  subjectInput.value=''
+  emailInput.value=''
+  title.textContext='Message Sent'
 
-  try {
-    await axios.post('/api/7-z-email', {
-      name,
-      email,
-      subject,
-      message,
-    })
-    nameInput.value = ''
-    emailInput.value = ''
-    subjectInput.value = ''
-    messageInput.value = ''
-    title.textContent = 'Message Sent'
-    setTimeout(() => {
-      title.textContent = 'Send a Message'
-    }, 3000)
-  } catch (error) {
-    alert.style.display = 'block'
-    alert.textContent = error.response.data
-  }
-  btn.disabled = false
-  btn.innerHTML = 'Send'
+  setTimeout(()=>{
+    title.textContent='Send a Message'
+  },3000)
+
+} catch(error){
+  alert.style.display='block'
+  alert.textContent=error.response.data
+}
+btn.disabled=true
+btn.innerHTML='Send'
+
 })
